@@ -1,0 +1,19 @@
+{
+  "name": "chat-api",
+  "version": "1.0.0",
+  "description": "chat Api ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/splatatozor/Chat-api.git"
+  },
+  "author": "Samuel Kabbaj",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/splatatozor/Chat-api/issues"
+  },
+  "homepage": "https://github.com/splatatozor/Chat-api#readme"
+}
