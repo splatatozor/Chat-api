@@ -17,4 +17,7 @@ module.exports = function(app) {
 
   app.route('/user/:username')
     .get(User.getOne);
+
+  app.route('/user/avatar')
+    .put(User.updateAvatar);
 };
