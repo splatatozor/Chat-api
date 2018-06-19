@@ -8,8 +8,9 @@ module.exports = function(app) {
 
 
   app.route('/user/connection')
-    .post(User.connect)
-    .get(User.disconnect);
+    .post(User.connect);
+  app.route('/user/disconnection')
+    .post(User.disconnect);
 
   app.route('/user')
     .get(User.list);

@@ -39,6 +39,10 @@ var UserSchema = new Schema({
   registrationDate: {
     type: Date,
     default: Date.now()
+  },
+  token: {
+    type: String,
+    default: ''
   }
 });
 
