@@ -11,6 +11,8 @@ var dirname = "./images";
 var mongoose = require('mongoose'),
   User = mongoose.model('User');
 
+const io = require('../../server.js').io;
+
 exports.register = function(req, res) {
   var new_user = new User(req.body);
 
@@ -52,6 +54,7 @@ exports.connect = function (req, res) {
           res.send(err);
         if(user !== null){
           res.json({success: true, token: token});
+
         }
         else{
           res.json({success: false, error: 'Unexpected error while updating the token'});
@@ -96,7 +99,7 @@ exports.getOne = function (req, res) {
 };
 
 exports.getUser = function (req, res) {
-  User.findOne({token: req.params.token}, function(err, user) {
+  User.findOne({token: req.query.token}, function(err, user) {
     if (err)
       res.send(err);
     res.json(user);

@@ -15,11 +15,11 @@ module.exports = function(app) {
   app.route('/user')
     .get(User.list);
 
+  app.route('/user/me')
+    .get(User.getUser);
+
   app.route('/user/:username')
     .get(User.getOne);
-
-  app.route('/user/:token')
-    .get(User.getUser);
 
   app.route('/user/avatar')
     .put(User.updateAvatar);
