@@ -2,6 +2,6 @@
 module.exports = function(app) {
   var Language = require('../controllers/LanguageController');
 
-  app.route('/country')
+  app.route('/language')
     .get(Language.list);
 };

@@ -26,8 +26,12 @@ mongoose.connect('mongodb://localhost/nochat', init).then(function (ok) {
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-var routes = require('./api/routes/UserRoutes'); //importing route
-routes(app); //register the route
+var userRoutes = require('./api/routes/UserRoutes'); //importing route
+userRoutes(app); //register the route
+var countryRoutes = require('./api/routes/CountryRoutes'); //importing route
+countryRoutes(app); //register the route
+var languageRoutes = require('./api/routes/LanguageRoutes'); //importing route
+languageRoutes(app); //register the route
 
 app.listen(port);
 
