@@ -21,10 +21,12 @@
     "nodemon": "^1.17.5"
   },
   "dependencies": {
+    "cors": "^2.8.4",
     "express": "^4.16.3",
     "formidable": "^1.2.1",
     "image-size": "^0.6.3",
     "mongoose": "^5.1.5",
-    "quickthumb": "0.0.12"
+    "quickthumb": "0.0.12",
+    "body-parser": "latest"
   }
 }
