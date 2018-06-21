@@ -4,6 +4,7 @@ var formidable = require('formidable');
 var fs = require('fs');
 var qt = require('quickthumb');
 var imageSize = require('image-size');
+var crypto = require('crypto');
 
 var dirname = "./images";
 
@@ -21,6 +22,7 @@ exports.register = function(req, res) {
         if (err)
           res.json({success: false, error: "Unexpected error while registering user", errorMessage: err});
         if (user === null) {
+          new_user.password = crypto.createHash('md5').update(new_user.password).digest("hex");
           new_user.save(function (err, user) {
             if (err)
               res.json({success: false, error: "Unexpected error while registering user", errorMessage: err});
@@ -39,6 +41,7 @@ exports.register = function(req, res) {
 };
 
 exports.connect = function (req, res) {
+  req.body.password = crypto.createHash('md5').update(req.body.password).digest("hex");
   User.findOne({username: req.body.username, password: req.body.password}, function(err, user) {
     if (err)
       res.send(err);
