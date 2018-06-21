@@ -89,6 +89,16 @@ exports.getOne = function (req, res) {
   User.findOne({username: req.params.username}, function(err, user) {
     if (err)
       res.send(err);
+    user.password = 'hidden';
+    user.token = 'hidden';
+    res.json(user);
+  });
+};
+
+exports.getUser = function (req, res) {
+  User.findOne({token: req.params.token}, function(err, user) {
+    if (err)
+      res.send(err);
     res.json(user);
   });
 };

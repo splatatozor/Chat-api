@@ -33,6 +33,8 @@ countryRoutes(app); //register the route
 var languageRoutes = require('./api/routes/LanguageRoutes'); //importing route
 languageRoutes(app); //register the route
 
-app.listen(port);
+var server = app.listen(port);
+
+var io = module.exports.io = require('socket.io').listen(server);
 
 console.log('todo list RESTful API server started on: ' + port);
