@@ -3,14 +3,19 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var countries = [
-  ['FRA', 'France'],
-  ['Oth', 'Other']
+  [1, 'France'],
+  [2, 'Monaco'],
+  [3, 'Ethiopia'],
+  [4, 'Mexico'],
+  [5, 'Korea'],
+  [6, 'Sweden'],
+  [7, 'Germany']
 ];
 
 
 var CountrySchema = new Schema({
   id: {
-    type: String,
+    type: Number,
     required: 'id'
   },
   label: {
@@ -19,22 +24,29 @@ var CountrySchema = new Schema({
   }
 });
 
+module.exports = mongoose.model('Country', CountrySchema);
+
 var init = function (db) {
-  console.log(Object.keys(db.modelSchemas));
-  if(Object.keys(db.modelSchemas).includes('Country')){
-    console.log('Country collection already loaded !');
-  }
-  else {
-    console.log('Need to create Country collection !');
-    for(var i in countries){
-      var country = countries[i];
-      var new_country = new CountrySchema();
-      new_country.id = country[0];
-      new_country.label = country[1];
-      new_country.save();
+  var self = this;
+  var _collections = [];
+  db.db.listCollections().toArray(function(err, collections){
+    for(var i in collections){
+      _collections.push(collections[i].name);
     }
-  }
-  module.exports = mongoose.model('Country', CountrySchema);
+    if(_collections.indexOf('countries') !== -1){
+      console.log('"countries" collection already loaded !');
+    }
+    else {
+      console.log('Need to create "countries" collection !');
+      for(var i in countries){
+        var country = countries[i];
+        var new_country = new self();
+        new_country.id = country[0];
+        new_country.label = country[1];
+        new_country.save();
+      }
+    }
+  });
 };
 
 module.exports.init = init;
