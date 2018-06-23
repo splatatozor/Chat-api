@@ -8,8 +8,10 @@ var crypto = require('crypto');
 
 var dirname = "./images";
 
-var mongoose = require('mongoose'),
-  User = mongoose.model('User');
+var mongoose = require('mongoose');
+var User = mongoose.model('User');
+var Language = mongoose.model('Language');
+var Country = mongoose.model('Country');
 
 const io = require('../../server.js').io;
 
@@ -92,9 +94,18 @@ exports.getOne = function (req, res) {
   User.findOne({username: req.params.username}, function(err, user) {
     if (err)
       res.send(err);
-    user.password = 'hidden';
-    user.token = 'hidden';
-    res.json(user);
+    else {
+      Language.findOne({id: user.language}, function(err, lang) {
+        Country.findOne({id: user.country}, function(err, country) {
+          user = user.toJSON();
+          user.language = lang.label;
+          user.country = country.label;
+          user.password = 'hidden';
+          user.token = 'hidden';
+          res.json(user);
+        });
+      });
+    }
   });
 };
 
@@ -102,7 +113,16 @@ exports.getUser = function (req, res) {
   User.findOne({token: req.query.token}, function(err, user) {
     if (err)
       res.send(err);
-    res.json(user);
+    else {
+      Language.findOne({id: user.language}, function(err, lang) {
+        Country.findOne({id: user.country}, function(err, country) {
+          user = user.toJSON();
+          user.language = lang.label;
+          user.country = country.label;
+          res.json(user);
+        });
+      });
+    }
   });
 };
 
