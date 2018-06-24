@@ -23,4 +23,7 @@ module.exports = function(app) {
 
   app.route('/user/avatar')
     .put(User.updateAvatar);
+
+  app.route('/user/delete')
+    .delete(User.delete);
 };

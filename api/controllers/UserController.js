@@ -69,6 +69,21 @@ exports.connect = function (req, res) {
   });
 };
 
+exports.delete = function (req, res) {
+  req.body.password = crypto.createHash('md5').update(req.body.password).digest("hex");
+  User.findOneAndRemove({token: req.body.token, password: req.body.password}, function (err, user) {
+    if (err)
+      res.json({success: false, errore: 'Unexpected error while deleting an user'});
+    else {
+      console.log(user);
+      if(user === null)
+        res.json({success: false, errore: 'No user to delete'});
+      else
+        res.json({success: true, msg: 'User correctly deleted'});
+    }
+  });
+};
+
 exports.disconnect = function (req, res) {
   User.findOneAndUpdate({token: req.body.token}, {token: ''}, {new: true}, function (err, user) {
     if(err)
