@@ -26,4 +26,7 @@ module.exports = function(app) {
 
   app.route('/user/delete')
     .delete(User.delete);
+
+  app.route('/user/friends')
+    .put(User.addFriend);
 };

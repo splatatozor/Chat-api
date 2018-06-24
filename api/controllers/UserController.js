@@ -71,13 +71,13 @@ exports.connect = function (req, res) {
 
 exports.delete = function (req, res) {
   req.body.password = crypto.createHash('md5').update(req.body.password).digest("hex");
-  User.findOneAndRemove({token: req.body.token, password: req.body.password}, function (err, user) {
+  User.findOneAndUpdate({token: req.body.token, password: req.body.password}, {deletedAt: Date.now()}, {new: true}, function (err, user) {
     if (err)
-      res.json({success: false, errore: 'Unexpected error while deleting an user'});
+      res.json({success: false, error: 'Unexpected error while deleting an user'});
     else {
       console.log(user);
       if(user === null)
-        res.json({success: false, errore: 'No user to delete'});
+        res.json({success: false, error: 'No user to delete or bad credentials'});
       else
         res.json({success: true, msg: 'User correctly deleted'});
     }
@@ -194,5 +194,27 @@ exports.updateAvatar = function (req, res) {
         res.json({success: false, error: 'User not found'});
       }
     });
+  });
+};
+
+exports.addFriend = function (req, res) {
+  User.findOne({username: req.body.username}, function (err, futureFriend) {
+    if(err)
+      res.json({success: false, error: 'Unexpected error while searching future friend'});
+    if(futureFriend !== null){
+      User.findOneAndUpdate({token: req.body.token}, {"$push": {friends: futureFriend.username}}, {new: true}, function (err, user) {
+        if(err)
+          res.json({success: false, error: 'Unexpected error while updating friends'});
+        if(user !== null){
+          res.json({success: true, msg: 'Friend correctly added'});
+        }
+        else{
+          res.json({success: false, error: 'Error while adding friend'});
+        }
+      });
+    }
+    else{
+      res.json({success: false, error: 'Unexpected error while adding friend : no user found with this user name'});
+    }
   });
 };

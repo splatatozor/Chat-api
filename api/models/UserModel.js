@@ -36,6 +36,10 @@ var UserSchema = new Schema({
     type: String,
     required: 'mail address'
   },
+  friends: {
+    type: [String],
+    default: ''
+  },
   registrationDate: {
     type: Date,
     default: Date.now()
@@ -43,6 +47,10 @@ var UserSchema = new Schema({
   token: {
     type: String,
     default: ''
+  },
+  deletedAt: {
+    type: Date,
+    default: null
   }
 });
 
