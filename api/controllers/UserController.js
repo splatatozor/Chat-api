@@ -218,3 +218,35 @@ exports.addFriend = function (req, res) {
     }
   });
 };
+
+exports.getAvatar = function (req, res){
+  console.log(req.params.username);
+  User.findOne({username: req.params.username}, function (err, user) {
+    if (err) {
+      throw err
+    } else {
+      if (user !== null) {
+        if (user.avatarUrl !== '') {
+          var path = user.avatarUrl;
+          var imgType = path.split('.');
+          imgType = imgType[imgType.length - 1];
+          if (imgType === "jpg")
+            imgType = "jpeg";
+          var img = fs.readFileSync(path);
+          res.writeHead(200, {'Content-Type': 'image/' + imgType});
+          res.end(img, 'binary');
+        }
+        else {
+          var img = fs.readFileSync('otherFiles/noAvatar.png');
+          res.writeHead(200, {'Content-Type': 'image/png'});
+          res.end(img, 'binary');
+        }
+      }
+      else {
+        var img = fs.readFileSync('otherFiles/noAvatar.png');
+        res.writeHead(200, {'Content-Type': 'image/png'});
+        res.end(img, 'binary');
+      }
+    }
+  })
+};

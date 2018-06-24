@@ -29,4 +29,7 @@ module.exports = function(app) {
 
   app.route('/user/friends')
     .put(User.addFriend);
+
+  app.route('/user/avatar/:username')
+    .get(User.getAvatar);
 };
