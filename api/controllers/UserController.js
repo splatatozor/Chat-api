@@ -60,16 +60,16 @@ exports.connect = function (req, res) {
 
           }
           else {
-            res.json({success: false, error: 'Unexpected error while updating the token'});
+            res.json({success: false, error: 'Unexpected error while updating the token', errCode: 'unexpected'});
           }
         });
       }
       else{
-        res.json({success: false, error: 'This user has deleted his account'});
+        res.json({success: false, error: 'This user has deleted his account', errCode: 'deleted'});
       }
     }
     else{
-      res.json({success: false, error: 'Bad username or password.'});
+      res.json({success: false, error: 'Bad username or password.', errCode: 'credentials'});
     }
   });
 };
@@ -219,6 +219,19 @@ exports.addFriend = function (req, res) {
     }
     else{
       res.json({success: false, error: 'Unexpected error while adding friend : no user found with this user name'});
+    }
+  });
+};
+
+exports.getFriends = function (req, res) {
+  User.findOne({username: req.params.username}, function (err, user) {
+    if(err)
+      res.json({success: false, error: 'Unexpected error while updating friends'});
+    if(user !== null){
+      res.json({success: true, friends: user.friends});
+    }
+    else{
+      res.json({success: false, error: 'Error getting friends'});
     }
   });
 };

@@ -28,7 +28,8 @@ module.exports = function(app) {
     .post(User.delete);
 
   app.route('/user/friends')
-    .put(User.addFriend);
+    .put(User.addFriend)
+    .get(User.getFriends);
 
   app.route('/user/avatar/:username')
     .get(User.getAvatar);
