@@ -156,11 +156,11 @@ exports.updateAvatar = function (req, res) {
         res.send(err);
       else if(user !== null){
         if(files.img.size > 2000000) {
-          res.json({success: false, error: 'Image size is bigger than 2Mo'});
+          res.json({success: false, error: 'Image size is bigger than 2Mo', errCode:"size"});
           return;
         }
         else if(files.img.type !== 'image/jpeg' && files.img.type !== 'image/png' && files.img.type !== 'image/gif') {
-          res.json({success: false, error: 'Image type is not jpg/jpeg, png or gif'});
+          res.json({success: false, error: 'Image type is not jpg/jpeg, png or gif', errCode:"type"});
           return;
         }
 
