@@ -25,7 +25,7 @@ module.exports = function(app) {
     .put(User.updateAvatar);
 
   app.route('/user/delete')
-    .delete(User.delete);
+    .post(User.delete);
 
   app.route('/user/friends')
     .put(User.addFriend);
