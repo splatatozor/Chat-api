@@ -33,4 +33,7 @@ module.exports = function(app) {
 
   app.route('/user/avatar/:username')
     .get(User.getAvatar);
+
+  app.route('/user/search/:username')
+    .get(User.search)
 };

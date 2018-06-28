@@ -267,3 +267,17 @@ exports.getAvatar = function (req, res){
     }
   })
 };
+
+exports.search = function (req, res) {
+  User.find({username: new RegExp('^.*'+req.params.username+'.*$', "i")}, function(err, users) {
+    if (err)
+      res.send(err);
+    else {
+      var usernames = [];
+      for(var i in users){
+        usernames.push(users[i].username);
+      }
+      res.json({users: usernames});
+    }
+  });
+};
