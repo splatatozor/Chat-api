@@ -50,18 +50,23 @@ exports.connect = function (req, res) {
     if (err)
       res.send(err);
     if(user !== null) {
-      var token = Date.now() + '-NC';
-      User.findOneAndUpdate({_id: user._id}, {token: token}, function (err, user) {
-        if(err)
-          res.send(err);
-        if(user !== null){
-          res.json({success: true, token: token});
+      if(user.deletedAt === null) {
+        var token = Date.now() + '-NC';
+        User.findOneAndUpdate({_id: user._id}, {token: token}, function (err, user) {
+          if (err)
+            res.send(err);
+          if (user !== null) {
+            res.json({success: true, token: token});
 
-        }
-        else{
-          res.json({success: false, error: 'Unexpected error while updating the token'});
-        }
-      });
+          }
+          else {
+            res.json({success: false, error: 'Unexpected error while updating the token'});
+          }
+        });
+      }
+      else{
+        res.json({success: false, error: 'This user has deleted his account'});
+      }
     }
     else{
       res.json({success: false, error: 'Bad username or password.'});
