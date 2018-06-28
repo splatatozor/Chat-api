@@ -7,8 +7,11 @@ var express = require('express'),
   Language = require('./api/models/LanguageModel'), //created model loading here
   bodyParser = require('body-parser');
 
-var cors = require('cors');
-app.use(cors({credentials: true, origin: ['*']}));
+app.all('/*', function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    next();
+});
 
 
 function init(err, db) {
