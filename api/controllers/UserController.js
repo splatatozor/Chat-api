@@ -110,22 +110,28 @@ exports.list = function (req, res) {
 };
 
 exports.getOne = function (req, res) {
-  User.findOne({username: req.params.username}, function(err, user) {
-    if (err)
-      res.send(err);
-    else {
-      Language.findOne({id: user.language}, function(err, lang) {
-        Country.findOne({id: user.country}, function(err, country) {
-          user = user.toJSON();
-          user.language = lang.label;
-          user.country = country.label;
-          user.password = 'hidden';
-          user.token = 'hidden';
-          res.json(user);
+  console.log(req.params);
+  if(req.params.username === "search") {
+    res.json({success: false, error: 'bad request', errCode: 'request'})
+  }
+  else{
+    User.findOne({username: req.params.username}, function (err, user) {
+      if (err)
+        res.send(err);
+      else {
+        Language.findOne({id: user.language}, function (err, lang) {
+          Country.findOne({id: user.country}, function (err, country) {
+            user = user.toJSON();
+            user.language = lang.label;
+            user.country = country.label;
+            user.password = 'hidden';
+            user.token = 'hidden';
+            res.json(user);
+          });
         });
-      });
-    }
-  });
+      }
+    });
+  }
 };
 
 exports.getUser = function (req, res) {
@@ -277,7 +283,7 @@ exports.search = function (req, res) {
       for(var i in users){
         usernames.push(users[i].username);
       }
-      res.json({users: usernames});
+      res.json({users: usernames, id: req.query.id});
     }
   });
 };
