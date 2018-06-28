@@ -70,14 +70,13 @@ exports.connect = function (req, res) {
 };
 
 exports.delete = function (req, res) {
-  req.body.password = crypto.createHash('md5').update(req.body.password).digest("hex");
-  User.findOneAndUpdate({token: req.body.token, password: req.body.password}, {deletedAt: Date.now()}, {new: true}, function (err, user) {
+  User.findOneAndUpdate({token: req.body.token}, {deletedAt: Date.now()}, {new: true}, function (err, user) {
     if (err)
       res.json({success: false, error: 'Unexpected error while deleting an user'});
     else {
       console.log(user);
       if(user === null)
-        res.json({success: false, error: 'No user to delete or bad credentials'});
+        res.json({success: false, error: 'No user to delete or bad token'});
       else
         res.json({success: true, msg: 'User correctly deleted'});
     }
