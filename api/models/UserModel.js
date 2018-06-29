@@ -40,6 +40,10 @@ var UserSchema = new Schema({
     type: [String],
     default: ''
   },
+  friendsRequests: {
+    type: [String],
+    default: ''
+  },
   registrationDate: {
     type: Date,
     default: Date.now()
