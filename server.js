@@ -5,7 +5,8 @@ var express = require('express'),
   User = require('./api/models/UserModel'), //created model loading here
   Country = require('./api/models/CountryModel'), //created model loading here
   Language = require('./api/models/LanguageModel'), //created model loading here
-  bodyParser = require('body-parser');
+  bodyParser = require('body-parser')
+  SocketManager = require('./api/SocketManager');
 
 app.all('/*', function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
@@ -38,6 +39,8 @@ languageRoutes(app); //register the route
 
 var server = app.listen(port);
 
-var io = module.exports.io = require('socket.io').listen(server);
+io = module.exports.io = require('socket.io').listen(server);
+
+SocketManager(io);
 
 console.log('todo list RESTful API server started on: ' + port);

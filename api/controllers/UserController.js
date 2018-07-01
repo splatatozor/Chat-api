@@ -113,6 +113,7 @@ exports.getOne = function (req, res) {
     res.json({success: false, error: 'bad request', errCode: 'request'})
   }
   else{
+    console.log("gonna get one !!!");
     User.findOne({username: req.params.username}, function (err, user) {
       if (err)
         res.send(err);
@@ -214,28 +215,34 @@ exports.addFriend = function (req, res) {
         if(err)
           res.json({success: false, error: 'Unexpected error while updating friends'});
         if(user !== null){
-          user.friends.push(futureFriend.username);
-          user.save(function (err) {
-            if(err){
-              res.json({success: false, msg: 'Error while adding friend'});
-            }
-            else{
-              if(futureFriend.friendsRequests.contains(user.username)) {
-                res.json({success: false, msg: 'Friend already added'});
+          if(user.friends.indexOf(futureFriend.username) >= 0) {
+            res.json({success: false, msg: 'Friend already added'});
+          }
+          else {
+            user.friends.push(futureFriend.username);
+            user.save(function (err) {
+              if (err) {
+                res.json({success: false, msg: 'Error while adding friend'});
               }
-              else{
-                futureFriend.friendsRequests.push(user.username);
-                futureFriend.save(function (err) {
-                  if (err) {
-                    res.json({success: false, msg: 'Error while adding friend request'});
-                  }
-                  else {
-                    res.json({success: true, msg: 'Friend correctly added'});
-                  }
-                });
+              else {
+                if (futureFriend.friendsRequests.indexOf(user.username) >= 0) {
+                  res.json({success: false, msg: 'Friend already added'});
+                }
+                else {
+                  futureFriend.friendsRequests.push(user.username);
+                  futureFriend.save(function (err) {
+                    if (err) {
+                      res.json({success: false, msg: 'Error while adding friend request'});
+                    }
+                    else {
+                      res.json({success: true, msg: 'Friend correctly added'});
+                      console.log("you are now friends !");
+                    }
+                  });
+                }
               }
-            }
-          });
+            });
+          }
         }
         else{
           res.json({success: false, error: 'Error while getting user'});
@@ -293,7 +300,6 @@ exports.getFriends = function (req, res) {
 };
 
 exports.getAvatar = function (req, res){
-  console.log(req.params.username);
   User.findOne({username: req.params.username}, function (err, user) {
     if (err) {
       throw err
