@@ -41,8 +41,7 @@ var UserSchema = new Schema({
     default: ''
   },
   friendsRequests: {
-    type: [String],
-    default: ''
+    type: [String]
   },
   registrationDate: {
     type: Date,

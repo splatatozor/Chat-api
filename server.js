@@ -2,9 +2,10 @@ var express = require('express'),
   app = express(),
   port = process.env.PORT || 3000,
   mongoose = require('mongoose'),
-  User = require('./api/models/UserModel'), //created model loading here
-  Country = require('./api/models/CountryModel'), //created model loading here
-  Language = require('./api/models/LanguageModel'), //created model loading here
+  User = require('./api/models/UserModel'),
+  Country = require('./api/models/CountryModel'),
+  Language = require('./api/models/LanguageModel'),
+  Discussion = require('./api/models/DiscussionModel'),
   bodyParser = require('body-parser')
   SocketManager = require('./api/SocketManager');
 
@@ -36,6 +37,8 @@ var countryRoutes = require('./api/routes/CountryRoutes'); //importing route
 countryRoutes(app); //register the route
 var languageRoutes = require('./api/routes/LanguageRoutes'); //importing route
 languageRoutes(app); //register the route
+var discussionRoutes = require('./api/routes/DiscussionRoutes'); //importing route
+discussionRoutes(app); //register the route
 
 var server = app.listen(port);
 

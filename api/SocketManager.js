@@ -1,5 +1,7 @@
 var mongoose = require('mongoose');
 var User = mongoose.model('User');
+var Discussion = mongoose.model('Discussion');
+var discussionController = require('./controllers/DiscussionController');
 
 connectedUsers = {};
 tokenToUsername = {};
@@ -53,6 +55,44 @@ module.exports = function(io) {
           }
         }
       );
+    });
+
+    socket.on('addDiscussionMessage', function (data) {
+      discussionController.checkUsers(data.user1, data.user2, data.token).then(function (res) {
+        Discussion.findOne({user1: data.user1, user2: data.user2}, function (err, discussion) {
+          if(err) {
+            socket.emit('getDiscussion', {success: false, error: 'unexpected error while finding discussion', errCode: 'unexpected'});
+            return;
+          }
+          if(discussion !== null){
+            discussion.messages.push({message: data.message, date: Date.now()});
+            discussion.save(function (err, dis) {
+              socket.emit('getDiscussion', {success: true, user: data.user2, discussion: discussion.messages});
+              if(connectedUsers.hasOwnProperty(data.user2))
+                connectedUsers[data.user2].emit('getDiscussion', {success: true, user: data.user1, discussion: discussion.messages});
+            });
+          }
+          else{
+            Discussion.findOne({user1: data.user2, user2: data.user1}, function (err, discussion) {
+              if(err) {
+                socket.emit('getDiscussion', {success: false, error: 'unexpected error while finding discussion', errCode: 'unexpected'});
+                return;
+              }
+              if(discussion !== null){
+                discussion.messages.push({message: data.message, date: Date.now()});
+                discussion.save(function (err, dis) {
+                  socket.emit('getDiscussion', {success: true, user: data.user2, discussion: discussion.messages});
+                  if(connectedUsers.hasOwnProperty(data.user2))
+                    connectedUsers[data.user2].emit('getDiscussion', {success: true, user: data.user1, discussion: discussion.messages});
+                });
+              }
+              else{
+                socket.emit('getDiscussion', {success: false, error: "can't find the discussion", errCode: 'cannot_find'});
+              }
+            });
+          }
+        });
+      })
     });
 
     socket.on('custom_connect', function (data) {
