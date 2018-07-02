@@ -65,7 +65,7 @@ module.exports = function(io) {
             return;
           }
           if(discussion !== null){
-            discussion.messages.push({message: data.message, date: Date.now()});
+            discussion.messages.push({message: data.message, date: Date.now(), user: data.user1});
             discussion.save(function (err, dis) {
               socket.emit('getDiscussion', {success: true, user: data.user2, discussion: discussion.messages});
               if(connectedUsers.hasOwnProperty(data.user2))
@@ -79,7 +79,7 @@ module.exports = function(io) {
                 return;
               }
               if(discussion !== null){
-                discussion.messages.push({message: data.message, date: Date.now()});
+                discussion.messages.push({message: data.message, date: Date.now(), user: data.user1});
                 discussion.save(function (err, dis) {
                   socket.emit('getDiscussion', {success: true, user: data.user2, discussion: discussion.messages});
                   if(connectedUsers.hasOwnProperty(data.user2))

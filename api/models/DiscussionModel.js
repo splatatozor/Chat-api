@@ -13,7 +13,7 @@ var DiscussionSchema = new Schema({
     required: 'user2'
   },
   messages: {
-    type: [{message: String, date: Date}],
+    type: [{message: String, date: Date, user: String}],
     default: []
   }
 });
