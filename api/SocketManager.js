@@ -101,6 +101,25 @@ module.exports = function(io) {
       connectedSockets[socket.id] = data.token;
       tokenToUsername[data.token] = data.username;
       io.emit('connectedUser', {status: true, user: data.username});
+      User.findOne({token: connectedSockets[socket.id]}, function(err, user) {
+          if (err)
+            socket.emit('error', {msg: "error on database connection while getting friends"});
+          if(user !== null){
+            for(var i = 0; i < user.friends.length; i++){
+              if(user.friends[i].length < 2){
+                continue;
+              }
+              console.log("u"+user.friends[i]+"u");
+              var friend = user.friends[i];
+              var status = false;
+              if (connectedUsers.hasOwnProperty(friend)) {
+                status = true;
+              }
+              socket.emit('connectedFriends', {status: status, username: friend});
+            }
+          }
+        }
+      );
     })
   }
 
