@@ -6,7 +6,7 @@ var express = require('express'),
   Country = require('./api/models/CountryModel'),
   Language = require('./api/models/LanguageModel'),
   Discussion = require('./api/models/DiscussionModel'),
-  bodyParser = require('body-parser')
+  bodyParser = require('body-parser'),
   SocketManager = require('./api/SocketManager');
 
 app.all('/*', function(req, res, next) {
